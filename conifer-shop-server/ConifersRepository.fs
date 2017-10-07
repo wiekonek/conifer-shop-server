@@ -4,6 +4,7 @@
 module ConifersRepository =
   open ConiferShop.Db
   open System
+  open ConiferShop.Rest
 
   let getAllConifers() =
     Console.WriteLine(conifersStorage.Count);
@@ -11,7 +12,7 @@ module ConifersRepository =
     
   let getConifer id =
     match conifersStorage.ContainsKey(id) with
-    | true -> Some conifersStorage.[id]
+    | true -> Some (conifersStorage.Item(id))
     | false -> None
 
   let createConifer (conifer: Conifer) =
@@ -19,13 +20,18 @@ module ConifersRepository =
     conifersStorage.Add(newConiferEntity.Data.Id, newConiferEntity);
     newConiferEntity
   
-  let updateConifer id (conifer: Conifer) =
-    match conifersStorage.ContainsKey(id) with
-    | true -> 
-      let updatedConifer = {LastModified=DateTime.Now; Data={conifer with Id = id}} 
-      conifersStorage.[id] <- updatedConifer
-      Some updatedConifer
-    | false -> None 
+  let updateConifer id eTag lastModified (conifer: Conifer) =
+    if conifersStorage.ContainsKey(id) then
+      let currentHash = conifersStorage.Item(id).GetHashCode()
+      let result = conifersStorage.Item(id).LastModified.CompareTo(lastModified)
+      if( conifersStorage.Item(id).LastModified.CompareTo(lastModified) = 0 && currentHash = eTag) then
+        let updatedConifer = {LastModified=DateTime.Now; Data={conifer with Id = id}} 
+        conifersStorage.Item(id) <- updatedConifer
+        Updated updatedConifer
+      else
+        PreconditionFailed
+    else
+      NotFound
 
   let deleteConifer id =
     conifersStorage.Remove(id) |> ignore

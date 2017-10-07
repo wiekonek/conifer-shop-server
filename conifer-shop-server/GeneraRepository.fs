@@ -4,31 +4,32 @@
 module GeneraRepository =
   open ConiferShop.Db
   open System
+  open ConiferShop.Rest
 
   let getAllGenera() =
-    conifersStorage.Values :> seq<Entity<Conifer>> // [ :> ] - converts a type to type that is higher in the hierarchy.
+    generaStorage.Values :> seq<Entity<Genus>> // [ :> ] - converts a type to type that is higher in the hierarchy.
     
-  let getGenre id =
-    match conifersStorage.ContainsKey(id) with
-    | true -> Some conifersStorage.[id]
+  let getGenus id =
+    match generaStorage.ContainsKey(id) with
+    | true -> Some (generaStorage.Item(id))
     | false -> None
 
-  let createGenre (conifer: Conifer) =
-    let newConiferEntity = {LastModified=DateTime.Now; Data={conifer with Id = nextUniqId conifersStorage}}
-    conifersStorage.Add(newConiferEntity.Data.Id, newConiferEntity);
-    newConiferEntity
+  let createGenus (genus: Genus) =
+    let newGenusEntity = {LastModified=DateTime.Now; Data={genus with Id = nextUniqId generaStorage}}
+    generaStorage.Add(newGenusEntity.Data.Id, newGenusEntity);
+    newGenusEntity
   
-  let updateGenre id (conifer: Conifer) =
-    match conifersStorage.ContainsKey(id) with
-    | true -> 
-      let updatedConifer = {LastModified=DateTime.Now; Data={conifer with Id = id}} 
-      conifersStorage.[id] <- updatedConifer
-      Some updatedConifer
-    | false -> None 
+  let updateGenus id _ _ (genus: Genus) =
+    if generaStorage.ContainsKey(id) then
+      let updatedGenus = {LastModified=DateTime.Now; Data={genus with Id = id}} 
+      generaStorage.Item(id) <- updatedGenus
+      Updated updatedGenus
+    else
+      NotFound
 
-  let deleteGenre id =
-    conifersStorage.Remove(id) |> ignore
+  let deleteGenus id =
+    generaStorage.Remove(id) |> ignore
 
-  let coniferGenre = conifersStorage.ContainsKey
+  let genusExists = generaStorage.ContainsKey
 
 

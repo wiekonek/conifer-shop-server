@@ -10,7 +10,6 @@ open Suave.Headers
 module Router =
   open ConiferShop.Rest
   open ConiferShop.Repositories
-  open System.Net.Http.Headers
   
   let conifersWebPart = rest "/conifers" {
     GetAll = getAllConifers
@@ -21,10 +20,20 @@ module Router =
     IsExists = coniferExists
   }
 
+  let generaWebPart = rest "/genera" {
+    GetAll = getAllGenera
+    GetById = getGenus
+    Create = createGenus
+    UpdateById = updateGenus
+    Delete = deleteGenus
+    IsExists = genusExists
+  }
+
   let appRouting =
     choose [
       OPTIONS >=> NO_CONTENT
       conifersWebPart
+      generaWebPart
     ]
 
 
