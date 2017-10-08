@@ -48,7 +48,7 @@ module ShopRepository =
     | false -> None
 
   let createShop (conifer: Shop) =
-    let newShopEntity = {LastModified=DateTime.Now; Data={conifer with Id = nextUniqId conifersStorage}}
+    let newShopEntity = {LastModified=DateTime.Now; Data={conifer with Id = nextUniqId shopStorage}}
     shopStorage.Add(newShopEntity.Data.Id, newShopEntity)
     shopsPerConiferStorage.Add(newShopEntity.Data.Id, [||])
     newShopEntity
