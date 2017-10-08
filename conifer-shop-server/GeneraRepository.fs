@@ -7,7 +7,7 @@ module GeneraRepository =
   open ConiferShop.Rest
 
   let getAllGenera() =
-    generaStorage.Values :> seq<Entity<Genus>> // [ :> ] - converts a type to type that is higher in the hierarchy.
+    generaStorage.Values :> seq<Entity<Genus>>
     
   let getGenus id =
     match generaStorage.ContainsKey(id) with

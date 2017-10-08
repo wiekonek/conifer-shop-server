@@ -7,7 +7,6 @@ module ConifersRepository =
   open ConiferShop.Rest
 
   let getAllConifers() =
-    Console.WriteLine(conifersStorage.Count);
     conifersStorage.Values :> seq<Entity<Conifer>> // [ :> ] - converts a type to type that is higher in the hierarchy.
     
   let getConifer id =

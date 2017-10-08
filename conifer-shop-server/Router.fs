@@ -11,6 +11,8 @@ module Router =
   open ConiferShop.Rest
   open ConiferShop.Repositories
   
+
+
   let conifersWebPart = rest "/conifers" {
     GetAll = getAllConifers
     GetById = getConifer
@@ -29,11 +31,25 @@ module Router =
     IsExists = genusExists
   }
 
+  let shopsWebPart = rest "/shops" {
+    GetAll = getAllShops
+    GetById = getShop
+    Create = createShop
+    UpdateById = updateShop
+    Delete = deleteShop
+    IsExists = shopExists
+  }
+
+
+
+
   let appRouting =
     choose [
       OPTIONS >=> NO_CONTENT
+      conifersShopsWebPart
       conifersWebPart
       generaWebPart
+      shopsWebPart
     ]
 
 

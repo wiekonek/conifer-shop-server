@@ -69,6 +69,16 @@ module Db =
       ]
     )
 
+  let shopsPerConiferStorage =
+    new Dictionary<int, int[]>(
+      dict [
+        (0, [| 0; 1; 2; 3 |]);
+        (1, [| 2; 3 |]);
+        (2, [| 0; 3 |]);
+        (3, [| 1; 2 |])
+      ]
+    )
+
   let nextUniqId (storage: Dictionary<int, 'a> ) =
     let mutable i = 0
     while(storage.ContainsKey(i)) do
